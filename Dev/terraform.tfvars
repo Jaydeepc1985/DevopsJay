@@ -44,7 +44,7 @@ flexi_server_x = {
 vnet_x = {
   "vnet_z" = {
     name                = "JaydeepVnet"
-    address_space       = ["10.16.0.0/27"]
+    address_space       = ["10.16.0.0/16"]
     location            = "Central india"
     resource_group_name = "jaydeep_rg1"
 
@@ -55,25 +55,33 @@ sub_front_x = {
     name                 = "frontend_jay"
     resource_group_name  = "jaydeep_rg1"
     virtual_network_name = "JaydeepVnet"
-    address_prefixes     = ["10.16.0.0/28"]
+    address_prefixes     = ["10.16.0.0/24"]
 
   }
   "back_x" = {
     name                 = "backend_jay"
     resource_group_name  = "jaydeep_rg1"
     virtual_network_name = "JaydeepVnet"
-    address_prefixes     = ["10.16.0.16/28"]
+    address_prefixes     = ["10.16.1.0/24"]
 
 }
+"bastion_x" = {
+    name                 = "AzureBastionSubnet"
+    resource_group_name  = "jaydeep_rg1"
+    virtual_network_name = "JaydeepVnet"
+    address_prefixes     = ["10.16.2.0/28"]
+
+}
+
 }
 
 public_ip_x = {
-  "pub-ip_front" = {
-    name                = "frontend-public-ip"
+  "pub-ip_bastion" = {
+    name                = "bastion-public-ip"
     resource_group_name = "jaydeep_rg1"
     location            = "Central india"
     allocation_method   = "Static"
-    sku                 = "Basic"
+    sku                 = "Standard"
 
   }
   "pub-ip_back" = {
@@ -81,8 +89,9 @@ public_ip_x = {
     resource_group_name = "jaydeep_rg1"
     location            = "Central india"
     allocation_method   = "Static"
-    sku                 = "Basic"
+    sku                 = "Standard"
   }
+ 
 }
 nic_config_x = {
   "nic_front" = {
@@ -90,7 +99,7 @@ nic_config_x = {
     location            = "Central india"
     resource_group_name = "jaydeep_rg1"
     subnet_name         = "frontend_jay"
-    public_ip_name      = "frontend-public-ip"
+    # public_ip_name      = "frontend-public-ip"
     ip_configuration = [
       {
         name                          = "ipconfig1"
@@ -354,3 +363,16 @@ kv_pe_x = {
   }
 }
 
+bastion-host_x = {
+  "bastion-host" = {
+    name                 = "bastion-host-jay"
+    location             = "Central india"
+    resource_group_name  = "jaydeep_rg1"
+    virtual_network_name = "JaydeepVnet"
+    ip_configuration = {
+      "ipconfig1" = {
+        name = "bastion-ipconfig"
+      }
+    }
+  }
+}

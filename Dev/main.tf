@@ -31,10 +31,17 @@ module "public_ip" {
   depends_on = [module.Vnet]
 
 }
+
+module "azure_bastion" {
+  source       = "../azure-bastion"
+  bastion-host = var.bastion-host_x
+  depends_on   = [module.Vnet,module.subnet,module.public_ip]
+}
+
 module "nic" {
   source       = "../nic"
   nic_config   = var.nic_config_x
-  depends_on   = [module.subnet, module.public_ip]
+  depends_on   = [module.subnet, module.public_ip,module.azure_bastion]
 }
 module "VM" {
   source      = "../VM"
@@ -49,16 +56,12 @@ module "NSG" {
   depends_on = [module.nic, module.VM]
 }
 
-module "sqlsrv" {
-  source     = "../sqlsrv"
-  sql-server = var.sql-server_x
-  depends_on = [module.abc]
-}
-module "sqldb" {
-  source       = "../sqldb"
-  sql-database = var.sql-database_x
-  depends_on   = [module.sqlsrv]
-}
+# module "sqlsrv" {
+#   source     = "../sqlsrv"
+#   sql-server = var.sql-server_x
+#   depends_on = [module.abc]
+# }
+# }
 
 # module "key_vaults" {
 #   source                   = "../key-vaults"
