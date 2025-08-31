@@ -8,6 +8,7 @@ pool:
 
 variables:
   working-path: $(System.DefaultWorkingDirectory)/Dev
+
 parameters:
   - name: environments
     displayName: Env
