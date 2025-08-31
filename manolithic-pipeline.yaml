@@ -4,9 +4,10 @@ trigger:
       - main
 
 pool: jay
+
 jobs:
-- job: 'TerraformInitPlan'
-  displayName: 'TerraformInitPlan job'
+- job: TerraformInitPlan
+  displayName: TerraformInitPlan job
   pool: 'jay'
   steps:
   - task: TerraformInstaller@1
@@ -18,7 +19,7 @@ jobs:
     inputs:
       provider: 'azurerm'
       command: 'init'
-      workingDirectory: '$(System.DefaultWorkingDirectory)/kv_secure_access/Dev'
+      workingDirectory: '$(System.DefaultWorkingDirectory)/Dev'
       backendServiceArm: 'jay'
       backendAzureRmResourceGroupName: 'jaydeep_rg'
       backendAzureRmStorageAccountName: 'jaydeepsa'
@@ -30,27 +31,55 @@ jobs:
     inputs:
       provider: 'azurerm'
       command: 'plan'
-      workingDirectory: '$(System.DefaultWorkingDirectory)/kv_secure_access/Dev'
-      benvironmentServiceNameAzureRM: 'jay'
+      workingDirectory: '$(System.DefaultWorkingDirectory)/Dev'
+      environmentServiceNameAzureRM: 'jay'
 
   - task: TerraformTask@5
-    displayName: 'Terraform Apply'
     inputs:
       provider: 'azurerm'
       command: 'apply'
-      workingDirectory: '$(System.DefaultWorkingDirectory)/kv_secure_access/Dev'
+      workingDirectory: '$(System.DefaultWorkingDirectory)/Dev'
+      commandOptions: '-auto-approve'
       environmentServiceNameAzureRM: 'jay'
-      args: '-auto-approve'
 
-  - job: 'TerraformDestroy'
-    displayName: 'Terraform Destroy Job'
-    pool: 'jay'
-    steps:
+- job: ScanningJob
+  displayName: Scanning Code
+  pool: jay
+  steps:
+  - task: tfsec@1
+    inputs:
+      version: 'v1.26.0'
+      debug: true
+      dir: '$(System.DefaultWorkingDirectory)'
+
+- job: Manualvalidation
+  displayName: Manual Validation 
+  pool: server
+  steps:
+  - task: ManualValidation@1
+    inputs:
+      notifyUsers: '2007.jaydeep@gmail.com'
+      approvers: '2007.jaydeep@gmail.com'
+      instructions: 'Kindly Check & Approve'
+
+- job: TerraformApply
+  displayName: Terraform Apply
+  pool: jay
+  steps:
   - task: TerraformTask@5
-    displayName: 'Terraform Destroy'
     inputs:
       provider: 'azurerm'
-      command: 'destroy'
-      workingDirectory: '$(System.DefaultWorkingDirectory)/kv_secure_access/Dev'
+      command: 'init'
+      workingDirectory: '$(System.DefaultWorkingDirectory)/Dev'
+      backendServiceArm: 'jay'
+      backendAzureRmResourceGroupName: 'jaydeep_rg'
+      backendAzureRmStorageAccountName: 'jaydeepsa'
+      backendAzureRmContainerName: 'tfstate'
+      backendAzureRmKey: 'terraform.tfstate'
+  - task: TerraformTask@5
+    inputs:
+      provider: 'azurerm'
+      command: 'apply'
+      workingDirectory: '$(System.DefaultWorkingDirectory)/Dev'
+      commandOptions: '-auto-approve'
       environmentServiceNameAzureRM: 'jay'
-      args: '-auto-approve'
