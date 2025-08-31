@@ -56,7 +56,6 @@ stages:
 # ---------------- Stage 2: Security Scan (tfsec) ----------------
 - stage: SecurityScan
   displayName: "Terraform Security Scan"
-  dependsOn: TerraformInitPlan
   jobs:
     - job: ScanningJob
       displayName: "Scanning Terraform Code"
@@ -72,7 +71,6 @@ stages:
 # ---------------- Stage 3: Manual Validation ----------------
 - stage: ManualValidation
   displayName: "Manual Approval"
-  dependsOn: SecurityScan
   jobs:
     - job: ManualValidationJob
       displayName: "Manual Validation"
@@ -88,7 +86,6 @@ stages:
 # ---------------- Stage 4: Terraform Apply ----------------
 - stage: TerraformApply
   displayName: "Terraform Apply"
-  dependsOn: ManualValidation
   jobs:
     - job: TerraformApplyJob
       displayName: "Terraform Apply Job"
