@@ -44,6 +44,7 @@ resource "azurerm_linux_virtual_machine" "frontend_vm" {
 
 
 }
+
 resource "azurerm_linux_virtual_machine" "backend_vm" {
   for_each                        = var.backend_vm
   name                            = each.value.name

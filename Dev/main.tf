@@ -45,8 +45,8 @@ module "nic" {
 }
 module "VM" {
   source      = "../VM"
-  frontend_vm_config = var.frontend_vm_config_x
-  backend_vm_config  = var.backend_vm_config_x
+  frontend_vm = var.frontend_vm_x
+  backend_vm  = var.backend_vm_x
   depends_on  = [module.nic]
 
 }

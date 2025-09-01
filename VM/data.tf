@@ -3,6 +3,7 @@ data "azurerm_network_interface" "net_front" {
   resource_group_name = "jaydeep_rg1"
 
 }
+
 data "azurerm_network_interface" "net_backend" {
   name                = "nic-backend-jay"
   resource_group_name = "jaydeep_rg1"

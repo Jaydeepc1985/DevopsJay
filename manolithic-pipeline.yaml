@@ -78,6 +78,7 @@ stages:
         name: server
       steps:
         - task: ManualValidation@1
+          displayName: "Manual Validation"
           inputs:
             notifyUsers: '2007.jaydeep@gmail.com'
             approvers: '2007.jaydeep@gmail.com'
