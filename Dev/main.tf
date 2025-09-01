@@ -32,21 +32,21 @@ module "public_ip" {
 
 }
 
-module "azure_bastion" {
-  source       = "../azure-bastion"
-  bastion-host = var.bastion-host_x
-  depends_on   = [module.Vnet,module.subnet,module.public_ip]
-}
+# module "azure_bastion" {
+#   source       = "../azure-bastion"
+#   bastion-host = var.bastion-host_x
+#   depends_on   = [module.Vnet,module.subnet,module.public_ip]
+# }
 
 module "nic" {
   source       = "../nic"
   nic_config   = var.nic_config_x
-  depends_on   = [module.subnet, module.public_ip,module.azure_bastion]
+  depends_on   = [module.subnet, module.public_ip]
 }
 module "VM" {
   source      = "../VM"
-  frontend_vm = var.frontend_vm_x
-  backend_vm  = var.backend_vm_x
+  frontend_vm_config = var.frontend_vm_config_x
+  backend_vm_config  = var.backend_vm_config_x
   depends_on  = [module.nic]
 
 }

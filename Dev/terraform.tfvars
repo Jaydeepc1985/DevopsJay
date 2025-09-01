@@ -94,8 +94,21 @@ public_ip_x = {
  
 }
 nic_config_x = {
-  "nic_front" = {
-    name                = "nic-frontend-jay"
+  "nic_front_1" = {
+    name                = "nic-frontend-jay-1"
+    location            = "Central india"
+    resource_group_name = "jaydeep_rg1"
+    subnet_name         = "frontend_jay"
+    # public_ip_name      = "frontend-public-ip"
+    ip_configuration = [
+      {
+        name                          = "ipconfig1"
+        private_ip_address_allocation = "Dynamic"
+      }
+    ]
+  }
+  "nic_front_2" = {
+    name                = "nic-frontend-jay-2"
     location            = "Central india"
     resource_group_name = "jaydeep_rg1"
     subnet_name         = "frontend_jay"
@@ -122,70 +135,104 @@ nic_config_x = {
   }
 }
 
-frontend_vm_x = {
-  "frontend_vm_x" = {
-    name                            = "jaydeep-frontend-vm"
-    location                        = "Central india"
-    resource_group_name             = "jaydeep_rg1"
-    network_interface_ids           = ["net_front"]
-    size                            = "Standard_B1s"
-    admin_username                  = "admin-login"
-    admin_password                  = "vm-password"
+frontend_vm_config_x = {
+  frontend_vm_1 = {
+    name                  = "jaydeep-frontend-vm1"
+    location              = "Central India"
+    resource_group_name   = "jaydeep_rg1"
+    network_interface_ids = ["nic_front_1"]
+    size                  = "Standard_B1s"
+    admin_username        = "admin-login"
+    admin_password        = "vm-password"
     disable_password_authentication = false
+
     os_disk = {
-      "osdisk-jaydeep" = {
-        name                 = "osdisk-jaydeep"
+      osdisk1 = {
+        name                 = "osdisk-jaydeep-1"
         caching              = "ReadWrite"
         storage_account_type = "Standard_LRS"
         disk_size_gb         = 30
       }
     }
+
     source_image_reference = {
-      "Canonnical" = {
+      ubuntu = {
         publisher = "Canonical"
         offer     = "0001-com-ubuntu-server-jammy"
         sku       = "22_04-LTS"
         version   = "latest"
       }
+    }
 
-    }
-    tags = {
-      role = "frontend"
-    }
+    tags = { role = "frontend" }
   }
-}
-backend_vm_x = {
-  "backend_vm_x" = {
-    name                            = "jaydeep-backend-vm"
-    location                        = "Central india"
-    resource_group_name             = "jaydeep_rg1"
-    network_interface_ids           = ["net_back"]
-    size                            = "Standard_B1s"
-    admin_username                  = "admin-login"
-    admin_password                  = "vm-password"
+
+  frontend_vm_2 = {
+    name                  = "jaydeep-frontend-vm2"
+    location              = "Central India"
+    resource_group_name   = "jaydeep_rg1"
+    network_interface_ids = ["nic_front_2"]
+    size                  = "Standard_B1s"
+    admin_username        = "admin-login"
+    admin_password        = "vm-password"
     disable_password_authentication = false
+
     os_disk = {
-      "osdisk-jaydeep1" = {
-        name                 = "osdisk-jaydeep1"
+      osdisk2 = {
+        name                 = "osdisk-jaydeep-2"
         caching              = "ReadWrite"
         storage_account_type = "Standard_LRS"
         disk_size_gb         = 30
       }
     }
+
     source_image_reference = {
-      "Canonnical" = {
+      ubuntu = {
         publisher = "Canonical"
-        offer     = "0001-com-ubuntu-server-focal"
-        sku       = "20_04-lts"
+        offer     = "0001-com-ubuntu-server-jammy"
+        sku       = "22_04-LTS"
         version   = "latest"
       }
+    }
 
-    }
-    tags = {
-      role = "backend"
-    }
+    tags = { role = "frontend" }
   }
 }
+
+backend_vm_config_x = {
+  backend_vm_1 = {
+    name                  = "jaydeep-backend-vm"
+    location              = "Central India"
+    resource_group_name   = "jaydeep_rg1"
+    network_interface_ids = ["nic_back"]
+    size                  = "Standard_B1s"
+    admin_username        = "admin-login"
+    admin_password        = "vm-password"
+    disable_password_authentication = false
+
+    os_disk = {
+      osdisk3 = {
+        name                 = "osdisk-jaydeep-3"
+        caching              = "ReadWrite"
+        storage_account_type = "Standard_LRS"
+        disk_size_gb         = 30
+      }
+    }
+
+    source_image_reference = {
+      ubuntu = {
+        publisher = "Canonical"
+        offer     = "0001-com-ubuntu-server-focal"
+        sku       = "20_04-LTS"
+        version   = "latest"
+      }
+    }
+
+    tags = { role = "backend" }
+  }
+}
+
+
 NSG_x = {
   "NSG_front" = {
     name                = "jaydeep-nsg-front"
@@ -248,7 +295,7 @@ NSG_x = {
       }
     }
     tags = {
-      environment = "production"
+      environment = "Dev"
     }
   }
 }

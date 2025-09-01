@@ -80,7 +80,7 @@ variable "nic_config_x" {
   }))
 }
 
-variable "frontend_vm_x" {
+variable "frontend_vm_config_x" {
   type = map(object({
     name                            = string
     location                        = string
@@ -106,7 +106,7 @@ variable "frontend_vm_x" {
   }))
 
 }
-variable "backend_vm_x" {
+variable "backend_vm_config_x" {
   type = map(object({
     name                            = string
     location                        = string
