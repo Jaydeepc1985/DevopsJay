@@ -41,8 +41,8 @@ stages:
             workingDirectory: '$(working-path)'
             backendServiceArm: 'jay'
             backendAzureRmResourceGroupName: 'jaydeep_rg'
-            backendAzureRmStorageAccountName: 'jaydeepsa'
-            backendAzureRmContainerName: 'tfstate'
+            backendAzureRmStorageAccountName: 'jaydeepstg321'
+            backendAzureRmContainerName: 'jaydeepcnt321'
             backendAzureRmKey: 'terraform.tfstate'
 
         - task: TerraformTask@5
